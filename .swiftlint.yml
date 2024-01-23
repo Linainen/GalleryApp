@@ -1,0 +1,43 @@
+opt_in_rules:
+  - closure_end_indentation
+  - closure_spacing
+  - empty_count
+  - explicit_init
+  - first_where
+  - operator_usage_whitespace
+  - overridden_super_call
+  - prohibited_super_call
+  - redundant_nil_coalescing
+  - multiline_parameters
+  - vertical_parameter_alignment_on_call
+  - joined_default_parameter
+  - unneeded_parentheses_in_closure_argument
+
+disabled_rules:
+  - unused_setter_value
+  - file_length
+  - shorthand_operator
+  - file_header
+  - trailing_whitespace
+  - explicit_init
+
+excluded:
+  - GalleryApp/SupportingFiles/AppDelegate.swift
+  - GalleryApp/SupportingFiles/SceneDelegate.swift
+  - Pods/
+
+identifier_name:
+  min_length:
+    warning: 2
+    error: 1
+  max_lendth:
+    warning: 50
+    error: 60
+
+function_body_length:
+  warning: 70
+  error: 120
+
+line_length:
+  warning: 150
+  error: 200

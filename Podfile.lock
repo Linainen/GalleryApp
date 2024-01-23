@@ -1,0 +1,38 @@
+PODS:
+  - Kingfisher (7.10.1)
+  - ProgressHUD (13.8.6)
+  - RxCocoa (6.6.0):
+    - RxRelay (= 6.6.0)
+    - RxSwift (= 6.6.0)
+  - RxRelay (6.6.0):
+    - RxSwift (= 6.6.0)
+  - RxSwift (6.6.0)
+  - SwiftLint (0.54.0)
+
+DEPENDENCIES:
+  - Kingfisher (~> 7.0)
+  - ProgressHUD (~> 13.8.6)
+  - RxCocoa
+  - RxSwift
+  - SwiftLint
+
+SPEC REPOS:
+  trunk:
+    - Kingfisher
+    - ProgressHUD
+    - RxCocoa
+    - RxRelay
+    - RxSwift
+    - SwiftLint
+
+SPEC CHECKSUMS:
+  Kingfisher: bc5abe80a8e0144537ef1dd5a0b2621b04f7f439
+  ProgressHUD: ee8924300accca88bfa39f6350f757c1c869a69c
+  RxCocoa: 44a80de90e25b739b5aeaae3c8c371a32e3343cc
+  RxRelay: 45eaa5db8ee4fb50e5ebd57deec0159e97fa51e6
+  RxSwift: a4b44f7d24599f674deebd1818eab82e58410632
+  SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
+
+PODFILE CHECKSUM: df93bad0bfa55683da77f31fcadf9cea44584d3f
+
+COCOAPODS: 1.13.0
