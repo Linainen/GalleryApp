@@ -8,8 +8,6 @@ target 'GalleryApp' do
   pod 'ProgressHUD', '~> 13.8.6'
   pod 'SwiftLint'
   pod 'Kingfisher', '~> 7.0'
-  pod 'RxSwift'
-  pod 'RxCocoa'
 
   # Pods for GalleryApp
 
