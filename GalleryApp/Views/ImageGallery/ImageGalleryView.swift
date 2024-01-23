@@ -6,12 +6,12 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class ImageGalleryView: UICollectionViewController {
-    
-    private let itemsPerRow: CGFloat = 2
-    private let sectionInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+
     private var unsplashPhotos: [UnsplashPhoto] = []
+    var timer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +23,14 @@ class ImageGalleryView: UICollectionViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        collectionView.layoutSubviews()
+        collectionView.layoutIfNeeded()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate { _ in
+            self.collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
         
     private func fillWithData() {
@@ -67,10 +74,17 @@ class ImageGalleryView: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let lastIndex = collectionView.numberOfItems(inSection: 0) - 1
         if indexPath.item == lastIndex {
-            NetworkManager.shared.fetchImages { [weak self] unsplashImages in
-                guard let images = unsplashImages else { return }
-                self?.unsplashPhotos += images
-                self?.collectionView.reloadData()
+            ProgressHUD.animationType = .circleRotateChase
+            ProgressHUD.colorAnimation = .progressAnimationColor
+            ProgressHUD.show()
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
+                NetworkManager.shared.fetchImages { [weak self] unsplashImages in
+                    guard let images = unsplashImages else { return }
+                    self?.unsplashPhotos += images
+                    self?.collectionView.reloadData()
+                    ProgressHUD.dismiss()
+                }
             }
         }
     }
@@ -80,13 +94,25 @@ class ImageGalleryView: UICollectionViewController {
 extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
     // swiftlint: disable line_length
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = view.frame.width / 3.5
-        let height = view.frame.height / 6
+        
+        var width: CGFloat = 0
+        var height: CGFloat = 0
+        
+        if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular {
+            width = view.frame.width / 3.5
+            height = view.frame.height / 6
+        } else if traitCollection.horizontalSizeClass == .regular && traitCollection.verticalSizeClass == .compact {
+            width = view.frame.width / 6
+            height = view.frame.height / 3.5
+        } else if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .compact {
+            width = view.frame.width / 6
+            height = view.frame.height / 4
+        } else {
+            width = view.frame.width / 6
+            height = view.frame.height / 5
+        }
+        
         return CGSize(width: width, height: height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return sectionInsets
     }
     // swiftlint: enable line_length
 }

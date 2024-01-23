@@ -14,4 +14,7 @@ extension UIColor {
     static var likeBtnColor: UIColor {
         return UIColor(red: 220 / 256, green: 62 / 256, blue: 31 / 256, alpha: 1)
     }
+    static var progressAnimationColor: UIColor {
+        return UIColor(red: 62 / 256, green: 155 / 256, blue: 220 / 256, alpha: 1)
+    }
 }

@@ -16,6 +16,7 @@ class ImageCell: UICollectionViewCell {
         didSet {
             ImageCell.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseInOut) {
                 let url = self.photo.urls.small.asURL
+                self.photoImageView.kf.indicatorType = .activity
                 self.photoImageView.kf.setImage(with: url, options: [.cacheOriginalImage])
                 self.userNameLabel.text = self.photo.user.username
                 self.likeButton.setImage(self.likeImage, for: .normal)

@@ -17,10 +17,10 @@ class TabBarController: UITabBarController {
     
     private func setupTabBar() {
         
+        let sectionInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
+        layout.sectionInset = sectionInsets
         
         self.tabBar.backgroundColor = .white.withAlphaComponent(0.9)
         viewControllers = [
