@@ -23,6 +23,7 @@
 		467CD5042B5F92A900E73786 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467CD5032B5F92A900E73786 /* TabBarView.swift */; };
 		468389322B5FA34D00454F4A /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468389312B5FA34D00454F4A /* UIImage+.swift */; };
 		468389342B5FB1D500454F4A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468389332B5FB1D500454F4A /* UIColor+.swift */; };
+		468389412B601EBE00454F4A /* ImageGalleryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468389402B601EBE00454F4A /* ImageGalleryViewModel.swift */; };
 		6EB3EE701DABE0CB9118D244 /* Pods_GalleryApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D2ED75C8571416682A557D3 /* Pods_GalleryApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,7 @@
 		467CD5032B5F92A900E73786 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		468389312B5FA34D00454F4A /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		468389332B5FB1D500454F4A /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		468389402B601EBE00454F4A /* ImageGalleryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryViewModel.swift; sourceTree = "<group>"; };
 		4FC5D4556655F72A78E9CECC /* Pods-GalleryApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GalleryApp.release.xcconfig"; path = "Target Support Files/Pods-GalleryApp/Pods-GalleryApp.release.xcconfig"; sourceTree = "<group>"; };
 		5D2ED75C8571416682A557D3 /* Pods_GalleryApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GalleryApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -189,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				467CD5012B5F929600E73786 /* ImageGalleryView.swift */,
+				468389402B601EBE00454F4A /* ImageGalleryViewModel.swift */,
 			);
 			path = ImageGallery;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				467CD4ED2B5F919000E73786 /* String+.swift in Sources */,
 				467CD4B42B5F8A5E00E73786 /* AppDelegate.swift in Sources */,
 				467CD4F02B5F91BC00E73786 /* UnsplashPhoto.swift in Sources */,
+				468389412B601EBE00454F4A /* ImageGalleryViewModel.swift in Sources */,
 				467CD4B62B5F8A5E00E73786 /* SceneDelegate.swift in Sources */,
 				467CD4F72B5F921200E73786 /* CoreDataManager.swift in Sources */,
 				468389322B5FA34D00454F4A /* UIImage+.swift in Sources */,

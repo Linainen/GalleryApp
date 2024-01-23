@@ -14,16 +14,16 @@ class ImageCell: UICollectionViewCell {
     
     var photo: UnsplashPhoto! {
         didSet {
-            ImageCell.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseInOut) {
-                let url = self.photo.urls.small.asURL
-                self.photoImageView.kf.indicatorType = .activity
-                self.photoImageView.kf.setImage(with: url, options: [.cacheOriginalImage])
-                self.userNameLabel.text = self.photo.user.username
-                self.likeButton.setImage(self.likeImage, for: .normal)
-                self.layoutIfNeeded()
-            }
+           let url = self.photo.urls.small.asURL
+           self.userNameLabel.text = self.photo.user.username
+           self.photoImageView.kf.indicatorType = .activity
+           self.photoImageView.kf.setImage(with: url, options: [.cacheOriginalImage])
+           self.likeButton.setImage(self.likeImage, for: .normal)
         }
     }
+    
+    var photoIndex: Int?
+    var delegate: LikePhoto?
     
     private var likeImage: UIImage? {
         return photo.likedByUser ? UIImage.likeImage : UIImage.dislikeImage
@@ -110,8 +110,9 @@ class ImageCell: UICollectionViewCell {
     }
     
     @objc private func likeButtonTapped() {
-        self.photo.likedByUser.toggle()
-        self.likeButton.setImage(self.likeImage, for: .normal)
+        photo.likedByUser.toggle()
+        delegate?.update(with: photo, at: photoIndex)
+        likeButton.setImage(likeImage, for: .normal)
     }
     
     private func setupViewShadow() {

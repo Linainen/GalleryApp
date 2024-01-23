@@ -10,8 +10,8 @@ import ProgressHUD
 
 class ImageGalleryView: UICollectionViewController {
 
-    private var unsplashPhotos: [UnsplashPhoto] = []
-    var timer: Timer?
+    private var viewModel = ImageGalleryViewModel()
+    private var timer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,9 +34,8 @@ class ImageGalleryView: UICollectionViewController {
     }
         
     private func fillWithData() {
-        NetworkManager.shared.fetchImages { [weak self] unsplashImages in
-            guard let images = unsplashImages else { return }
-            self?.unsplashPhotos = images
+        viewModel.getPhotos()
+        DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
         }
     }
@@ -60,13 +59,15 @@ class ImageGalleryView: UICollectionViewController {
     // MARK: - Collection View delegates and data source
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return unsplashPhotos.count
+        return viewModel.photos.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let photo = unsplashPhotos[indexPath.item]
+        let photo = viewModel.photos[indexPath.item]
         // swiftlint:disable:next force_cast
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as! ImageCell
+        cell.delegate = self
+        cell.photoIndex = indexPath.item
         cell.photo = photo
         return cell
     }
@@ -78,10 +79,9 @@ class ImageGalleryView: UICollectionViewController {
             ProgressHUD.colorAnimation = .progressAnimationColor
             ProgressHUD.show()
             timer?.invalidate()
-            timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
-                NetworkManager.shared.fetchImages { [weak self] unsplashImages in
-                    guard let images = unsplashImages else { return }
-                    self?.unsplashPhotos += images
+            timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
+                self?.viewModel.getPhotos()
+                DispatchQueue.main.async { [weak self] in
                     self?.collectionView.reloadData()
                     ProgressHUD.dismiss()
                 }
@@ -89,6 +89,18 @@ class ImageGalleryView: UICollectionViewController {
         }
     }
 
+}
+
+extension ImageGalleryView: LikePhoto {
+    
+    func update(with newPhoto: UnsplashPhoto?, at index: Int?) {
+        guard let photo = newPhoto, let index = index else { return }
+        self.viewModel.photos[index] = photo
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView.reloadData()
+        }
+    }
+    
 }
 
 extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
