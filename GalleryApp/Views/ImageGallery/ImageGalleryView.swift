@@ -9,42 +9,44 @@ import UIKit
 
 class ImageGalleryView: UICollectionViewController {
     
+    private let itemsPerRow: CGFloat = 2
+    private let sectionInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     private var unsplashPhotos: [UnsplashPhoto] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupCollectionView()
         setupNavBar()
+        fillWithData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        collectionView.layoutSubviews()
+    }
         
+    private func fillWithData() {
         NetworkManager.shared.fetchImages { [weak self] unsplashImages in
             guard let images = unsplashImages else { return }
             self?.unsplashPhotos = images
             self?.collectionView.reloadData()
         }
     }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NetworkManager.shared.setPageToFirst()
-    }
-    
+
     // MARK: - Setup UI
     
     private func setupCollectionView() {
         collectionView.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
+        collectionView.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 0)
+        collectionView.contentInsetAdjustmentBehavior = .automatic
     }
     
     private func setupNavBar() {
         let title = UILabel()
-        let textColor = UIColor(red: 128 / 256, green: 127 / 256, blue: 127 / 256, alpha: 1)
         title.text = "Photos"
-        title.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        title.textColor = textColor
+        title.font = UIFont.systemFont(ofSize: 20, weight: .medium)
+        title.textColor = .navTitleColor
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: title)
     }
     
@@ -73,4 +75,18 @@ class ImageGalleryView: UICollectionViewController {
         }
     }
 
+}
+
+extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
+    // swiftlint: disable line_length
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = view.frame.width / 3.5
+        let height = view.frame.height / 6
+        return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
+    // swiftlint: enable line_length
 }

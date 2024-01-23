@@ -48,10 +48,6 @@ final class NetworkManager {
         }
     }
     
-    func setPageToFirst() {
-        self.page = 1
-    }
-    
     private func decodeJSON<T: Decodable>(type: T.Type, from data: Data?) -> T? {
         guard let data = data else { return nil }
         let decoder = JSONDecoder()

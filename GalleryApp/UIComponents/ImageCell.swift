@@ -14,11 +14,17 @@ class ImageCell: UICollectionViewCell {
     
     var photo: UnsplashPhoto! {
         didSet {
-            let url = photo.urls.small.asURL
-            photoImageView.kf.setImage(with: url)
-            let image = photo.likedByUser ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
-            likeButton.setImage(image, for: .normal)
+            ImageCell.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseInOut) {
+                let url = self.photo.urls.small.asURL
+                self.photoImageView.kf.setImage(with: url)
+                self.likeButton.setImage(self.likeImage, for: .normal)
+                self.layoutIfNeeded()
+            }
         }
+    }
+    
+    private var likeImage: UIImage? {
+        return photo.likedByUser ? UIImage.likeImage : UIImage.dislikeImage
     }
     
     private let likeButton: UIButton = {
@@ -30,7 +36,8 @@ class ImageCell: UICollectionViewCell {
     private let photoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -39,14 +46,13 @@ class ImageCell: UICollectionViewCell {
         
         setupPhotoImageView()
         setupLikeButton()
-    }
-    
-    @objc private func likeTaped() {
-        self.photo.likedByUser.toggle()
+        setupViewShadow()
     }
     
     private func setupPhotoImageView() {
         addSubview(photoImageView)
+        photoImageView.clipsToBounds = true
+        photoImageView.layer.cornerRadius = 8
         NSLayoutConstraint.activate([
             photoImageView.topAnchor.constraint(equalTo: self.topAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -55,19 +61,25 @@ class ImageCell: UICollectionViewCell {
         ])
     }
     
-    @objc private func updateLikeButton() {
+    @objc private func likeButtonTapped() {
         self.photo.likedByUser.toggle()
-        let image = photo.likedByUser ? UIImage(systemName: "heart.fill") : UIImage(systemName: "heart")
-        likeButton.setImage(image, for: .normal)
+        self.likeButton.setImage(self.likeImage, for: .normal)
     }
     
     private func setupLikeButton() {
         addSubview(likeButton)
-        likeButton.addTarget(self, action: #selector(updateLikeButton), for: .touchUpInside)
+        likeButton.tintColor = .likeBtnColor
+        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
         NSLayoutConstraint.activate([
             likeButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -8),
             likeButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -8)
         ])
+    }
+    
+    private func setupViewShadow() {
+        self.layer.shadowRadius = 6
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.3
     }
     
     required init?(coder: NSCoder) {

@@ -21,8 +21,6 @@ class TabBarController: UITabBarController {
         layout.scrollDirection = .vertical
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 10
-        layout.itemSize = CGSize(width: 120,
-                                 height: 200)
         
         self.tabBar.backgroundColor = .white.withAlphaComponent(0.9)
         viewControllers = [
