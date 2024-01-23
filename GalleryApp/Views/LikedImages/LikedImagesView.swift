@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  LikedImagesView.swift
 //  GalleryApp
 //
 //  Created by Siarhei Anoshka on 23.01.24.
@@ -7,11 +7,12 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class LikedImagesView: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
+        view.backgroundColor = .brown
     }
 
 }
