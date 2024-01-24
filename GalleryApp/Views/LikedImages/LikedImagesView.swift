@@ -7,6 +7,7 @@
 
 import UIKit
 import ProgressHUD
+import Kingfisher
 
 class LikedImagesView: UICollectionViewController {
     
@@ -24,9 +25,18 @@ class LikedImagesView: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         RotationSettings.allowRotation = true
         setupTabBar()
         fillWithData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if viewModel.checkNoImages() {
+            ProgressHUD.colorBannerTitle = .descriptionTextColor
+            ProgressHUD.showError("Empty", image: .noImages, interaction: true, delay: 1.3)
+        }
     }
     
     override func viewWillLayoutSubviews() {

@@ -15,4 +15,8 @@ final class LikedImagesViewModel {
         CoreDataManager.shared.fetchCDImages()
         photos = CoreDataManager.shared.fetchUnsplashImages()
     }
+    
+    func checkNoImages() -> Bool {
+        photos.isEmpty ? true : false
+    }
 }

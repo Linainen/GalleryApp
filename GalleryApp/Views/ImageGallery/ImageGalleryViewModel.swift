@@ -32,9 +32,9 @@ final class ImageGalleryViewModel {
     
     func checkLikedPhotos() {
         for (index, photo) in photos.enumerated() {
-            if !photoIds.contains(photo.id) {
+            if photoIds.contains(photo.id) {
                 var updatedPhoto = photo
-                updatedPhoto.likedByUser = false
+                updatedPhoto.likedByUser = true
                 photos[index] = updatedPhoto
             }
         }

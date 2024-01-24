@@ -85,7 +85,7 @@ class ImageDetailCell: UICollectionViewCell {
         hstack.translatesAutoresizingMaskIntoConstraints = false
         hstack.axis = .horizontal
         hstack.clipsToBounds = true
-        hstack.spacing = 12
+        hstack.spacing = 8
         hstack.alignment = .center
         hstack.distribution = .equalCentering
         hstack.isLayoutMarginsRelativeArrangement = true
@@ -200,7 +200,7 @@ class ImageDetailCell: UICollectionViewCell {
             } else if self?.photo?.likedByUser == false {
                 self?.delegate?.deleteFromCoreData(photo: self?.photo)
             }
-            self?.likeButton.setImage(self?.likeImage, for: .normal)
+            self?.likeButton.setBackgroundImage(self?.likeImage, for: .normal)
         }
     }
     

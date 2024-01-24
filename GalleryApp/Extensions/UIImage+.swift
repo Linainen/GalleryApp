@@ -21,4 +21,9 @@ extension UIImage {
         let image = UIImage(systemName: "photo")
         return image
     }
+    static var noImages: UIImage? {
+        let image = UIImage(systemName: "clear")
+        image?.withTintColor(.descriptionTextColor)
+        return image
+    }
 }

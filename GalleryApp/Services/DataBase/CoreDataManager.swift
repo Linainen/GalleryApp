@@ -15,13 +15,20 @@ final class CoreDataManager {
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    var likedImagesIds: [String] = []
-    
-    private var images: [CDUnsplashPhoto] = [] {
-        didSet {
-            self.updateImagesIds()
+    var likedImagesIds: [String] {
+        var array: [String] = []
+        images.forEach {
+            array.append($0.id)
         }
+        return array
     }
+    
+    private var images: [CDUnsplashPhoto] = []
+//    {
+//        didSet {
+//            self.updateImagesIds()
+//        }
+//    }
     
     func fetchCDImages() {
         do {
@@ -69,22 +76,24 @@ final class CoreDataManager {
         let user = User(username: photo.username)
         let urls = URLS(regular: photo.regularUrl,
                         small: photo.smallUrl)
-        let newPhoto = UnsplashPhoto(id: photo.id,
-                                     createdAt: photo.createdAt,
-                                     altDescription: photo.altDescription,
-                                     urls: urls,
-                                     likes: Int(photo.likes),
-                                     user: user,
-                                     likedByUser: true)
+        let newPhoto = UnsplashPhoto(
+            id: photo.id,
+            createdAt: photo.createdAt,
+            altDescription: photo.altDescription,
+            urls: urls,
+            likes: Int(photo.likes),
+            user: user,
+            likedByUser: true
+        )
         return newPhoto
     }
     
-    private func updateImagesIds() {
-        self.likedImagesIds.removeAll()
-        images.forEach { [weak self] in
-            self?.likedImagesIds.append($0.id)
-        }
-    }
+//    private func updateImagesIds() {
+//        self.likedImagesIds.removeAll()
+//        images.forEach { [weak self] in
+//            self?.likedImagesIds.append($0.id)
+//        }
+//    }
     
     private func saveContext() {
         do {

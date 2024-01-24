@@ -28,4 +28,9 @@ final class ImageDetailViewModel {
             }
         }
     }
+    
+    func updatePhotos() {
+        CoreDataManager.shared.fetchCDImages()
+        photos = CoreDataManager.shared.fetchUnsplashImages()
+    }
 }

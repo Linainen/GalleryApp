@@ -23,10 +23,6 @@ class ImageDetailView: UICollectionViewController {
         setupNavBar()
     }
     
-    override var shouldAutorotate: Bool {
-        return false
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -81,11 +77,14 @@ class ImageDetailView: UICollectionViewController {
         let photo = self.viewModel.photos[indexPath.item]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageDetailCell.identifier, for: indexPath) as! ImageDetailCell
         cell.photo = photo
+        cell.delegate = self
         cell.photoIndex = indexPath.item
         return cell
     }
     
 }
+
+    // MARK: - UICollectionViewFlowLayoutDelegate
 
 extension ImageDetailView: UICollectionViewDelegateFlowLayout {
     // swiftlint: disable line_length
@@ -97,4 +96,29 @@ extension ImageDetailView: UICollectionViewDelegateFlowLayout {
         return .zero
     }
     // swiftlint: enable line_length
+}
+
+    // MARK: - LikePhotoDelegate
+
+extension ImageDetailView: LikePhoto {
+    
+    func update(with newPhoto: UnsplashPhoto?, at index: Int?) {
+        guard let photo = newPhoto, let index = index else { return }
+        self.viewModel.photos[index].likedByUser = photo.likedByUser
+        self.viewModel.photos[index].likes = photo.likes
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView.reloadData()
+        }
+    }
+    
+    func deleteFromCoreData(photo: UnsplashPhoto?) {
+        print(CoreDataManager.shared.likedImagesIds.count)
+        CoreDataManager.shared.deleteFromDatabase(photo: photo)
+        print(CoreDataManager.shared.likedImagesIds.count)
+    }
+    
+    func saveToCoreData(photo: UnsplashPhoto?) {
+        guard let photo = photo else { return }
+        CoreDataManager.shared.saveNewPhotoToCoreData(photo)
+    }
 }
