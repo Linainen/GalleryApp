@@ -9,24 +9,35 @@ import UIKit
 
 class ImageDetailView: UICollectionViewController {
     
-    private let viewModel = ImageDetailViewModel()
+    let viewModel = ImageDetailViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupCollectionView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         hideTabBar()
+        let indexPath = IndexPath(item: viewModel.scrollIndex, section: 0)
+        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
     
     // MARK: - SetupUI
     
     private func setupCollectionView() {
         collectionView.register(ImageDetailCell.self, forCellWithReuseIdentifier: ImageDetailCell.identifier)
-
+        collectionView.isPagingEnabled = true
     }
     
     private func hideTabBar() {
         self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        collectionView.layoutIfNeeded()
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -40,7 +51,9 @@ class ImageDetailView: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let photo = self.viewModel.photos[indexPath.item]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageDetailCell.identifier, for: indexPath) as! ImageDetailCell
+        cell.photo = photo
         return cell
     }
     
@@ -52,6 +65,11 @@ extension ImageDetailView: UICollectionViewDelegateFlowLayout {
         return CGSize(width: view.safeAreaLayoutGuide.layoutFrame.width,
                       height: view.safeAreaLayoutGuide.layoutFrame.height)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return .zero
+    }
+    
     // swiftlint: enable line_length
     
 }

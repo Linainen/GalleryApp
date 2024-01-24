@@ -16,9 +16,9 @@ class ImageCell: UICollectionViewCell {
     var photo: UnsplashPhoto! {
         didSet {
             let url = self.photo.urls.small.asURL
-            self.userNameLabel.text = self.photo.user.username
             self.photoImageView.kf.indicatorType = .activity
             self.photoImageView.kf.setImage(with: url, options: [.cacheOriginalImage])
+            self.userNameLabel.text = self.photo.user.username
             self.likeButton.setImage(self.likeImage, for: .normal)
         }
     }

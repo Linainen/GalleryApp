@@ -35,6 +35,7 @@ class ImageGalleryView: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupTabBar()
         viewModel.checkLikedPhotos()
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
@@ -76,6 +77,10 @@ class ImageGalleryView: UICollectionViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: title)
     }
     
+    private func setupTabBar() {
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     // MARK: - Collection View delegates and data source
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -94,6 +99,8 @@ class ImageGalleryView: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let layout = CustomCollectionViewFlowLayout.imageDetailLayout
         let imageDetailVC = ImageDetailView(collectionViewLayout: layout)
+        imageDetailVC.viewModel.photos = self.viewModel.photos
+        imageDetailVC.viewModel.scrollIndex = indexPath.item
         navigationController?.pushViewController(imageDetailVC, animated: true)
     }
     
@@ -131,6 +138,14 @@ extension ImageGalleryView: LikePhoto {
     func saveToCoreData(photo: UnsplashPhoto?) {
         guard let photo = photo else { return }
         CoreDataManager.shared.saveNewPhotoToCoreData(photo)
+    }
+    
+    func deleteFromCoreData(photo: UnsplashPhoto?) {
+        CoreDataManager.shared.deleteFromDatabase(photo: photo)
+        self.viewModel.checkLikedPhotos()
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView?.reloadData()
+        }
     }
     
 }

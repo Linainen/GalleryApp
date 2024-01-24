@@ -6,14 +6,25 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ImageDetailCell: UICollectionViewCell {
     
     static let identifier = String(describing: ImageDetailCell.self)
     
+    var photo: UnsplashPhoto! {
+        didSet {
+            let url = photo.urls.regular.asURL
+            self.photoImageView.kf.indicatorType = .activity
+            self.photoImageView.kf.setImage(with: url, options: [.cacheOriginalImage])
+            
+        }
+    }
+    
     private let photoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -31,7 +42,7 @@ class ImageDetailCell: UICollectionViewCell {
             photoImageView.topAnchor.constraint(equalTo: self.topAnchor),
             photoImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             photoImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            photoImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            photoImageView.heightAnchor.constraint(equalToConstant: self.frame.height * 0.5)
         ])
     }
     

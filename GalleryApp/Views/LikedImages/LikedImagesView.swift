@@ -17,11 +17,13 @@ class LikedImagesView: UICollectionViewController {
 
         setupCollectionView()
         setupNavBar()
+        setupTabBar()
         fillWithData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupTabBar()
         fillWithData()
     }
     
@@ -60,6 +62,10 @@ class LikedImagesView: UICollectionViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: title)
     }
     
+    private func setupTabBar() {
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     // MARK: - Setup Collection View Delegates and Data Source
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -78,6 +84,8 @@ class LikedImagesView: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let layout = CustomCollectionViewFlowLayout.imageDetailLayout
         let imageDetailVC = ImageDetailView(collectionViewLayout: layout)
+        imageDetailVC.viewModel.photos = self.viewModel.photos
+        imageDetailVC.viewModel.scrollIndex = indexPath.item
         navigationController?.pushViewController(imageDetailVC, animated: true)
     }
 

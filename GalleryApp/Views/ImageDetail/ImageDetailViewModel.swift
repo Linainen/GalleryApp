@@ -9,6 +9,7 @@ import Foundation
 
 final class ImageDetailViewModel {
     
-    var photos: [Int] = [1, 2, 3]
+    var photos: [UnsplashPhoto] = []
     
+    var scrollIndex: Int = 0
 }
