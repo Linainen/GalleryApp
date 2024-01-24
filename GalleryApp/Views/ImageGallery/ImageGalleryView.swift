@@ -35,6 +35,7 @@ class ImageGalleryView: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        RotationSettings.allowRotation = true
         setupTabBar()
         viewModel.checkLikedPhotos()
         DispatchQueue.main.async { [weak self] in

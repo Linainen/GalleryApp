@@ -15,6 +15,7 @@ class LikedImagesView: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        RotationSettings.allowRotation = true
         setupCollectionView()
         setupNavBar()
         setupTabBar()
@@ -23,6 +24,7 @@ class LikedImagesView: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        RotationSettings.allowRotation = true
         setupTabBar()
         fillWithData()
     }
