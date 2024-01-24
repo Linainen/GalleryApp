@@ -91,6 +91,12 @@ class ImageGalleryView: UICollectionViewController {
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let layout = CustomCollectionViewFlowLayout.imageDetailLayout
+        let imageDetailVC = ImageDetailView(collectionViewLayout: layout)
+        navigationController?.pushViewController(imageDetailVC, animated: true)
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let lastIndex = collectionView.numberOfItems(inSection: 0) - 1
         if indexPath.item == lastIndex {

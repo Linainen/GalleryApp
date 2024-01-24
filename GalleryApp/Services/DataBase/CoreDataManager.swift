@@ -17,7 +17,7 @@ final class CoreDataManager {
     
     var likedImagesIds: [String] = []
     
-    var images: [CDUnsplashPhoto] = [] {
+    private var images: [CDUnsplashPhoto] = [] {
         didSet {
             self.updateImagesIds()
         }
@@ -50,18 +50,6 @@ final class CoreDataManager {
                 self.fetchCDImages()
             }
         }
-    }
-    
-    func converToCDUnsplash(from photo: UnsplashPhoto) -> CDUnsplashPhoto {
-        let likedPhoto = CDUnsplashPhoto(context: self.context)
-        likedPhoto.id = photo.id
-        likedPhoto.altDescription = photo.altDescription
-        likedPhoto.createdAt = photo.createdAt
-        likedPhoto.likes = Int32(photo.likes)
-        likedPhoto.username = photo.user.username
-        likedPhoto.regularUrl = photo.urls.regular
-        likedPhoto.smallUrl = photo.urls.small
-        return likedPhoto
     }
     
     func saveNewPhotoToCoreData(_ photo: UnsplashPhoto) {

@@ -74,6 +74,12 @@ class LikedImagesView: UICollectionViewController {
         cell.photo = photo
         return cell
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let layout = CustomCollectionViewFlowLayout.imageDetailLayout
+        let imageDetailVC = ImageDetailView(collectionViewLayout: layout)
+        navigationController?.pushViewController(imageDetailVC, animated: true)
+    }
 
 }
 

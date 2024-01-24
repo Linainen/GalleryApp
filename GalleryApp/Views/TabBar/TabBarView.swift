@@ -18,7 +18,7 @@ class TabBarController: UITabBarController {
     private func setupTabBar() {
         
         let galleryLayout = CustomCollectionViewFlowLayout.imageGalleryLayout
-        let likedLayout = CustomCollectionViewFlowLayout.LikedImagesLayout
+        let likedLayout = CustomCollectionViewFlowLayout.likedImagesLayout
         
         self.tabBar.backgroundColor = .white.withAlphaComponent(0.9)
         viewControllers = [
