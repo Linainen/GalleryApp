@@ -17,19 +17,17 @@ class TabBarController: UITabBarController {
     
     private func setupTabBar() {
         
-        let sectionInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.sectionInset = sectionInsets
+        let galleryLayout = CustomCollectionViewFlowLayout.imageGalleryLayout
+        let likedLayout = CustomCollectionViewFlowLayout.LikedImagesLayout
         
         self.tabBar.backgroundColor = .white.withAlphaComponent(0.9)
         viewControllers = [
-            createNavigationController(root: ImageGalleryView(collectionViewLayout: layout),
+            createNavigationController(root: ImageGalleryView(collectionViewLayout: galleryLayout),
                                        title: "Photos",
-                                       image: UIImage(systemName: "photo")),
-            createNavigationController(root: LikedImagesView(),
-                                       title: "Favorite",
-                                       image: UIImage(systemName: "heart.fill"))
+                                       image: UIImage.photoImage),
+            createNavigationController(root: LikedImagesView(collectionViewLayout: likedLayout),
+                                       title: "Favorites",
+                                       image: UIImage.likeImage)
         ]
     }
     

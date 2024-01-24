@@ -17,4 +17,8 @@ extension UIImage {
         let image = UIImage(systemName: "heart")
         return image
     }
+    static var photoImage: UIImage? {
+        let image = UIImage(systemName: "photo")
+        return image
+    }
 }

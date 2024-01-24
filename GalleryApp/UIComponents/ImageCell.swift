@@ -11,15 +11,15 @@ import Kingfisher
 class ImageCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: ImageCell.self)
-    var timer: Timer?
+    private var timer: Timer?
     
     var photo: UnsplashPhoto! {
         didSet {
-           let url = self.photo.urls.small.asURL
-           self.userNameLabel.text = self.photo.user.username
-           self.photoImageView.kf.indicatorType = .activity
-           self.photoImageView.kf.setImage(with: url, options: [.cacheOriginalImage])
-           self.likeButton.setImage(self.likeImage, for: .normal)
+            let url = self.photo.urls.small.asURL
+            self.userNameLabel.text = self.photo.user.username
+            self.photoImageView.kf.indicatorType = .activity
+            self.photoImageView.kf.setImage(with: url, options: [.cacheOriginalImage])
+            self.likeButton.setImage(self.likeImage, for: .normal)
         }
     }
     
@@ -113,9 +113,14 @@ class ImageCell: UICollectionViewCell {
     // Set timer in order to forbid user to tap infinitely
     @objc private func likeButtonTapped() {
         timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { [weak self] _ in
             self?.photo.likedByUser.toggle()
             self?.delegate?.update(with: self?.photo, at: self?.photoIndex)
+            if self?.photo?.likedByUser == true {
+                self?.delegate?.saveToCoreData(photo: self?.photo)
+            } else if self?.photo?.likedByUser == false {
+                self?.delegate?.deleteFromCoreData(photo: self?.photo)
+            }
             self?.likeButton.setImage(self?.likeImage, for: .normal)
         }
     }

@@ -8,6 +8,18 @@
 import UIKit
 import ProgressHUD
 
+protocol LikePhoto {
+    func update(with newPhoto: UnsplashPhoto?, at index: Int?)
+    func saveToCoreData(photo: UnsplashPhoto?)
+    func deleteFromCoreData(photo: UnsplashPhoto?)
+}
+
+extension LikePhoto {
+    func update(with newPhoto: UnsplashPhoto?, at index: Int?) {}
+    func saveToCoreData(photo: UnsplashPhoto?) {}
+    func deleteFromCoreData(photo: UnsplashPhoto?) {}
+}
+
 class ImageGalleryView: UICollectionViewController {
 
     private var viewModel = ImageGalleryViewModel()
@@ -19,6 +31,14 @@ class ImageGalleryView: UICollectionViewController {
         setupCollectionView()
         setupNavBar()
         fillWithData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.checkLikedPhotos()
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView.reloadData()
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -90,14 +110,21 @@ class ImageGalleryView: UICollectionViewController {
 
 }
 
+// MARK: - LikePhoto Protocol Delegates
+
 extension ImageGalleryView: LikePhoto {
-    
+
     func update(with newPhoto: UnsplashPhoto?, at index: Int?) {
         guard let photo = newPhoto, let index = index else { return }
-        self.viewModel.photos[index] = photo
+        self.viewModel.photos[index].likedByUser = photo.likedByUser
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
         }
+    }
+    
+    func saveToCoreData(photo: UnsplashPhoto?) {
+        guard let photo = photo else { return }
+        CoreDataManager.shared.saveNewPhotoToCoreData(photo)
     }
     
 }
