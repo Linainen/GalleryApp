@@ -64,7 +64,6 @@ class ImageGalleryView: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let photo = viewModel.photos[indexPath.item]
-        // swiftlint:disable:next force_cast
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as! ImageCell
         cell.delegate = self
         cell.photoIndex = indexPath.item

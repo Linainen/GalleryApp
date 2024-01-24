@@ -9,6 +9,7 @@ import Foundation
 
 struct UnsplashPhoto: Decodable {
     let id: String
+    let createdAt: String
     let altDescription: String
     let urls: URLS
     let likes: Int

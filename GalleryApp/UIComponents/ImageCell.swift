@@ -11,6 +11,7 @@ import Kingfisher
 class ImageCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: ImageCell.self)
+    var timer: Timer?
     
     var photo: UnsplashPhoto! {
         didSet {
@@ -109,10 +110,14 @@ class ImageCell: UICollectionViewCell {
         ])
     }
     
+    // Set timer in order to forbid user to tap infinitely
     @objc private func likeButtonTapped() {
-        photo.likedByUser.toggle()
-        delegate?.update(with: photo, at: photoIndex)
-        likeButton.setImage(likeImage, for: .normal)
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { [weak self] _ in
+            self?.photo.likedByUser.toggle()
+            self?.delegate?.update(with: self?.photo, at: self?.photoIndex)
+            self?.likeButton.setImage(self?.likeImage, for: .normal)
+        }
     }
     
     private func setupViewShadow() {

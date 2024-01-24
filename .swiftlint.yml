@@ -20,6 +20,7 @@ disabled_rules:
   - file_header
   - trailing_whitespace
   - explicit_init
+  - force_cast
 
 excluded:
   - GalleryApp/SupportingFiles/AppDelegate.swift
