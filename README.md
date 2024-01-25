@@ -15,6 +15,7 @@ save them locally on your device! Sounds great, doesn't it?
 # Technolgies used:
 * Swift - Swift is a general-purpose, multi-paradigm, compiled programming language developed by Apple Inc. for iOS, iPadOS, macOS, watchOS and more.
 * MVVM architecture alongside with Delegates design pattern.
+* Singleton pattern is used for NetworkManager and CoreDataManager
 * Native CoreData is used for data persistance.
 * Third party libraries such as Kingfisher, ProgressHud, SwiftLint are used for better performance and UI experience.
 * All the images are cached once downloaded from the server. Thanks Kingfisher for that!
