@@ -20,11 +20,11 @@ save them locally on your device! Sounds great, doesn't it?
 * All the images are cached once downloaded from the server. Thanks Kingfisher for that!
 
 # Installation:
-Clone the repository:
+Clone the repository: <br>
 https://github.com/Linainen/GalleryApp.git
 
 Install the application dependencies:
-$ cd /GalleryApp /n
+$ cd /GalleryApp <br>
 $ pod install
 
 Open the file GalleryApp.xcworkspace with XCode
