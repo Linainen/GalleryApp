@@ -10,7 +10,7 @@ save them locally on your device! Sounds great, doesn't it?
 3. Once the image is liked, it's added to your favorites collection. If you dislake the image, it's instantly removed.
 4. You can download the photo locally on your phone by tapping top-right corner button on a Detail screen.
 
-<a href="url"><img src="https://github.com/Linainen/GalleryApp/assets/98283252/f908219b-06c4-4249-beed-1e01c65f8c77" align="center" height="540" width="750" ></a>
+<a href="url"><img src="https://github.com/Linainen/GalleryApp/assets/98283252/f908219b-06c4-4249-beed-1e01c65f8c77" align="center" height="500" width="750" ></a>
 
 # Technolgies used:
 * Swift - Swift is a general-purpose, multi-paradigm, compiled programming language developed by Apple Inc. for iOS, iPadOS, macOS, watchOS and more.
