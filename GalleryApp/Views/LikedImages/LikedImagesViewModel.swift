@@ -11,6 +11,10 @@ final class LikedImagesViewModel {
     
     var photos: [UnsplashPhoto] = []
     
+    func deleteFromCoreData(photo: UnsplashPhoto?) {
+        CoreDataManager.shared.deleteFromDatabase(photo: photo)
+    }
+    
     func getPhotos() {
         CoreDataManager.shared.fetchCDImages()
         photos = CoreDataManager.shared.fetchUnsplashImages()

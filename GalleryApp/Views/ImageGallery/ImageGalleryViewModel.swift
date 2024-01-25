@@ -10,12 +10,13 @@ import Foundation
 final class ImageGalleryViewModel {
     
     var photos: [UnsplashPhoto] = []
-    var photoIds: [String] {
-        CoreDataManager.shared.fetchCDImages()
-        return CoreDataManager.shared.likedImagesIds
+    
+    private var photoIds: [String] {
+        CoreDataManager.shared.likedImagesIds
     }
     
     func getPhotos() {
+        CoreDataManager.shared.fetchCDImages()
         NetworkManager.shared.fetchImages { [weak self] result in
             guard let images = result, let self = self else { return }
             images.forEach {
@@ -32,11 +33,19 @@ final class ImageGalleryViewModel {
     
     func checkLikedPhotos() {
         for (index, photo) in photos.enumerated() {
-            if photoIds.contains(photo.id) {
-                var updatedPhoto = photo
-                updatedPhoto.likedByUser = true
-                photos[index] = updatedPhoto
-            }
+            var updatedPhoto = photo
+            updatedPhoto.likedByUser = photoIds.contains(photo.id) ? true : false
+            photos[index] = updatedPhoto
         }
+    }
+    
+    func deleteFromCoreData(_ photo: UnsplashPhoto?) {
+        CoreDataManager.shared.deleteFromDatabase(photo: photo)
+        self.checkLikedPhotos()
+    }
+    
+    func saveToCoreData(_ photo: UnsplashPhoto?) {
+        CoreDataManager.shared.saveNewPhotoToCoreData(photo)
+        self.checkLikedPhotos()
     }
 }

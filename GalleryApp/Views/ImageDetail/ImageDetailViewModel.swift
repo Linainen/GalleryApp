@@ -12,6 +12,10 @@ final class ImageDetailViewModel {
     
     var photos: [UnsplashPhoto] = []
     
+    private var photoIds: [String] {
+        CoreDataManager.shared.likedImagesIds
+    }
+    
     var scrollIndex: Int = 0
     
     func saveToImageGallery() {
@@ -29,8 +33,21 @@ final class ImageDetailViewModel {
         }
     }
     
-    func updatePhotos() {
-        CoreDataManager.shared.fetchCDImages()
-        photos = CoreDataManager.shared.fetchUnsplashImages()
+    func deleteFromCoreData(_ photo: UnsplashPhoto?) {
+        CoreDataManager.shared.deleteFromDatabase(photo: photo)
+        self.checkLikedPhotos()
+    }
+    
+    func saveToCoreData(_ photo: UnsplashPhoto?) {
+        CoreDataManager.shared.saveNewPhotoToCoreData(photo)
+        self.checkLikedPhotos()
+    }
+    
+    private func checkLikedPhotos() {
+        for (index, photo) in photos.enumerated() {
+            var updatedPhoto = photo
+            updatedPhoto.likedByUser = photoIds.contains(photo.id) ? true : false
+            photos[index] = updatedPhoto
+        }
     }
 }

@@ -12,34 +12,24 @@ class ImageDetailCell: UICollectionViewCell {
     
     static let identifier = String(describing: ImageDetailCell.self)
     var timer: Timer?
-    var delegate: LikePhoto?
+    var delegate: LikePhotoDelegate?
     var photoIndex: Int?
-    
     var photo: UnsplashPhoto! {
         didSet {
             self.setupView()
         }
     }
-    
     private var likes: Int {
         return photo.likedByUser ? photo.likes + 1 : photo.likes
     }
-    
     private var likeImage: UIImage? {
         return photo.likedByUser ? UIImage.likeImage : UIImage.dislikeImage
     }
-    
     private var likeTitle: String {
         return likes == 1 ? "like" : "likes"
     }
     
-    private let photoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleAspectFill
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
+    // MARK: - Inintialize UI elements
     
     private let vStack: UIStackView = {
         let vstack = UIStackView()
@@ -90,6 +80,14 @@ class ImageDetailCell: UICollectionViewCell {
         hstack.distribution = .equalCentering
         hstack.isLayoutMarginsRelativeArrangement = true
         return hstack
+    }()
+    
+    private let photoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private let likeButton: UIButton = {
@@ -193,14 +191,11 @@ class ImageDetailCell: UICollectionViewCell {
     @objc private func likeTapped() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { [weak self] _ in
-            self?.photo.likedByUser.toggle()
-            self?.delegate?.update(with: self?.photo, at: self?.photoIndex)
-            if self?.photo?.likedByUser == true {
-                self?.delegate?.saveToCoreData(photo: self?.photo)
-            } else if self?.photo?.likedByUser == false {
-                self?.delegate?.deleteFromCoreData(photo: self?.photo)
-            }
-            self?.likeButton.setBackgroundImage(self?.likeImage, for: .normal)
+            guard let self = self else { return }
+            self.photo.likedByUser.toggle()
+            self.photo.likedByUser ?
+            self.delegate?.saveToCoreData(photo: photo) : self.delegate?.deleteFromCoreData(photo: photo)
+            self.likeButton.setBackgroundImage(self.likeImage, for: .normal)
         }
     }
     

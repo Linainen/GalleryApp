@@ -31,6 +31,7 @@
 		4683895A2B610C4B00454F4A /* ImageDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468389592B610C4B00454F4A /* ImageDetailView.swift */; };
 		4683895C2B610C5500454F4A /* ImageDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4683895B2B610C5500454F4A /* ImageDetailViewModel.swift */; };
 		468389602B610E6F00454F4A /* ImageDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4683895F2B610E6F00454F4A /* ImageDetailCell.swift */; };
+		468FF99B2B623219000A84DC /* LikePhotoDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FF99A2B623219000A84DC /* LikePhotoDelegate.swift */; };
 		469FD2742B61643A0048F37E /* RotationSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469FD2732B61643A0048F37E /* RotationSettings.swift */; };
 		6EB3EE701DABE0CB9118D244 /* Pods_GalleryApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D2ED75C8571416682A557D3 /* Pods_GalleryApp.framework */; };
 /* End PBXBuildFile section */
@@ -63,6 +64,7 @@
 		468389592B610C4B00454F4A /* ImageDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailView.swift; sourceTree = "<group>"; };
 		4683895B2B610C5500454F4A /* ImageDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailViewModel.swift; sourceTree = "<group>"; };
 		4683895F2B610E6F00454F4A /* ImageDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailCell.swift; sourceTree = "<group>"; };
+		468FF99A2B623219000A84DC /* LikePhotoDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikePhotoDelegate.swift; sourceTree = "<group>"; };
 		469FD2732B61643A0048F37E /* RotationSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotationSettings.swift; sourceTree = "<group>"; };
 		4FC5D4556655F72A78E9CECC /* Pods-GalleryApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GalleryApp.release.xcconfig"; path = "Target Support Files/Pods-GalleryApp/Pods-GalleryApp.release.xcconfig"; sourceTree = "<group>"; };
 		5D2ED75C8571416682A557D3 /* Pods_GalleryApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GalleryApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,10 +113,12 @@
 			isa = PBXGroup;
 			children = (
 				467CD4EA2B5F90CE00E73786 /* SupportingFiles */,
+				468FF9972B6231DB000A84DC /* Settings */,
 				467CD4EB2B5F918700E73786 /* Extensions */,
 				467CD4EE2B5F91AF00E73786 /* Models */,
 				467CD4F12B5F91DE00E73786 /* Services */,
 				467CD4F82B5F923B00E73786 /* UIComponents */,
+				468FF9982B6231F7000A84DC /* Protocols */,
 				467CD4FB2B5F926000E73786 /* Views */,
 				467CD4C42B5F8A6100E73786 /* Info.plist */,
 				467CD4BC2B5F8A5E00E73786 /* GalleryApp.xcdatamodeld */,
@@ -127,7 +131,6 @@
 			children = (
 				467CD4B32B5F8A5E00E73786 /* AppDelegate.swift */,
 				467CD4B52B5F8A5E00E73786 /* SceneDelegate.swift */,
-				469FD2732B61643A0048F37E /* RotationSettings.swift */,
 				467CD4B92B5F8A5E00E73786 /* Main.storyboard */,
 				467CD4BF2B5F8A6100E73786 /* Assets.xcassets */,
 				467CD4C12B5F8A6100E73786 /* LaunchScreen.storyboard */,
@@ -250,6 +253,22 @@
 				468389562B60EC5500454F4A /* CustomCollectionViewFlowLayout.swift */,
 			);
 			path = CollectionViewLayout;
+			sourceTree = "<group>";
+		};
+		468FF9972B6231DB000A84DC /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				469FD2732B61643A0048F37E /* RotationSettings.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		468FF9982B6231F7000A84DC /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				468FF99A2B623219000A84DC /* LikePhotoDelegate.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		9EC8E8718AECA46A5AE673B0 /* Frameworks */ = {
@@ -407,6 +426,7 @@
 				467CD4B62B5F8A5E00E73786 /* SceneDelegate.swift in Sources */,
 				467CD4F72B5F921200E73786 /* CoreDataManager.swift in Sources */,
 				468389552B60EBE400454F4A /* LikedImagesViewModel.swift in Sources */,
+				468FF99B2B623219000A84DC /* LikePhotoDelegate.swift in Sources */,
 				468389522B60DE6B00454F4A /* CDUnsplashPhoto+CoreDataClass.swift in Sources */,
 				468389322B5FA34D00454F4A /* UIImage+.swift in Sources */,
 				468389342B5FB1D500454F4A /* UIColor+.swift in Sources */,

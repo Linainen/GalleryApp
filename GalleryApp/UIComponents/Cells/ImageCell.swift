@@ -12,19 +12,18 @@ class ImageCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: ImageCell.self)
     private var timer: Timer?
-    
     var photo: UnsplashPhoto! {
         didSet {
             setupUI()
         }
     }
-    
     var photoIndex: Int?
-    var delegate: LikePhoto?
-    
+    var delegate: LikePhotoDelegate?
     private var likeImage: UIImage? {
         return photo.likedByUser ? UIImage.likeImage : UIImage.dislikeImage
     }
+    
+    // MARK: - Inintialize UI elements
     
     private let photoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -110,14 +109,11 @@ class ImageCell: UICollectionViewCell {
     @objc private func likeButtonTapped() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false) { [weak self] _ in
-            self?.photo.likedByUser.toggle()
-            self?.delegate?.update(with: self?.photo, at: self?.photoIndex)
-            if self?.photo?.likedByUser == true {
-                self?.delegate?.saveToCoreData(photo: self?.photo)
-            } else if self?.photo?.likedByUser == false {
-                self?.delegate?.deleteFromCoreData(photo: self?.photo)
-            }
-            self?.likeButton.setImage(self?.likeImage, for: .normal)
+            guard let self = self else { return }
+            self.photo.likedByUser.toggle()
+            self.photo.likedByUser ?
+            self.delegate?.saveToCoreData(photo: photo) : self.delegate?.deleteFromCoreData(photo: photo)
+            self.likeButton.setBackgroundImage(self.likeImage, for: .normal)
         }
     }
     
@@ -126,7 +122,7 @@ class ImageCell: UICollectionViewCell {
         self.photoImageView.kf.indicatorType = .activity
         self.photoImageView.kf.setImage(with: url, options: [.cacheOriginalImage])
         self.userNameLabel.text = self.photo.user.username
-        self.likeButton.setImage(self.likeImage, for: .normal)
+        self.likeButton.setBackgroundImage(self.likeImage, for: .normal)
     }
     
     private func setupViewShadow() {

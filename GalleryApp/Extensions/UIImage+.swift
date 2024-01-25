@@ -22,7 +22,7 @@ extension UIImage {
         return image
     }
     static var noImages: UIImage? {
-        let image = UIImage(systemName: "clear")
+        let image = UIImage(systemName: "exclamationmark.triangle")
         image?.withTintColor(.descriptionTextColor)
         return image
     }

@@ -12,7 +12,7 @@ import ProgressHUD
 class ImageDetailView: UICollectionViewController {
     
     let viewModel = ImageDetailViewModel()
-    var indexPath: IndexPath {
+    private var indexPath: IndexPath {
         IndexPath(item: viewModel.scrollIndex, section: 0)
     }
     
@@ -26,12 +26,16 @@ class ImageDetailView: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        RotationSettings.allowRotation = false
+        setupRotationSettings()
         hideTabBar()
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
     }
     
     // MARK: - SetupUI
+    
+    private func setupRotationSettings() {
+        RotationSettings.allowRotation = false
+    }
     
     private func setupCollectionView() {
         collectionView.register(ImageDetailCell.self, forCellWithReuseIdentifier: ImageDetailCell.identifier)
@@ -89,7 +93,8 @@ class ImageDetailView: UICollectionViewController {
 extension ImageDetailView: UICollectionViewDelegateFlowLayout {
     // swiftlint: disable line_length
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.safeAreaLayoutGuide.layoutFrame.width, height: view.safeAreaLayoutGuide.layoutFrame.height)
+        return CGSize(width: view.safeAreaLayoutGuide.layoutFrame.width,
+                      height: view.safeAreaLayoutGuide.layoutFrame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -100,25 +105,13 @@ extension ImageDetailView: UICollectionViewDelegateFlowLayout {
 
     // MARK: - LikePhotoDelegate
 
-extension ImageDetailView: LikePhoto {
-    
-    func update(with newPhoto: UnsplashPhoto?, at index: Int?) {
-        guard let photo = newPhoto, let index = index else { return }
-        self.viewModel.photos[index].likedByUser = photo.likedByUser
-        self.viewModel.photos[index].likes = photo.likes
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView.reloadData()
-        }
-    }
+extension ImageDetailView: LikePhotoDelegate {
     
     func deleteFromCoreData(photo: UnsplashPhoto?) {
-        print(CoreDataManager.shared.likedImagesIds.count)
-        CoreDataManager.shared.deleteFromDatabase(photo: photo)
-        print(CoreDataManager.shared.likedImagesIds.count)
+        self.viewModel.deleteFromCoreData(photo)
     }
     
     func saveToCoreData(photo: UnsplashPhoto?) {
-        guard let photo = photo else { return }
-        CoreDataManager.shared.saveNewPhotoToCoreData(photo)
+        self.viewModel.saveToCoreData(photo)
     }
 }

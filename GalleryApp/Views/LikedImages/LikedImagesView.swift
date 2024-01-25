@@ -16,17 +16,14 @@ class LikedImagesView: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        RotationSettings.allowRotation = true
-        setupCollectionView()
-        setupNavBar()
-        setupTabBar()
+        setupUI()
         fillWithData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        RotationSettings.allowRotation = true
+        setupRotationSettings()
         setupTabBar()
         fillWithData()
     }
@@ -35,8 +32,22 @@ class LikedImagesView: UICollectionViewController {
         super.viewDidAppear(animated)
         if viewModel.checkNoImages() {
             ProgressHUD.colorBannerTitle = .descriptionTextColor
-            ProgressHUD.showError("Empty", image: .noImages, interaction: true, delay: 1.3)
+            ProgressHUD.colorAnimation = .likeBtnColor
+            ProgressHUD.showError("Empty", image: .noImages, interaction: true, delay: 1.5)
         }
+    }
+    
+    // MARK: - Layout settings
+    
+    private func setupUI() {
+        setupRotationSettings()
+        setupCollectionView()
+        setupNavBar()
+        setupTabBar()
+    }
+    
+    private func setupRotationSettings() {
+        RotationSettings.allowRotation = true
     }
     
     override func viewWillLayoutSubviews() {
@@ -50,6 +61,8 @@ class LikedImagesView: UICollectionViewController {
             self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
+    
+    // MARK: - Fill collection view with data
     
     private func fillWithData() {
         viewModel.getPhotos()
@@ -103,21 +116,25 @@ class LikedImagesView: UICollectionViewController {
 
 }
 
-extension LikedImagesView: LikePhoto {
+    // MARK: - LikePhoto protocol implementation
+
+extension LikedImagesView: LikePhotoDelegate {
     
     func deleteFromCoreData(photo: UnsplashPhoto?) {
-        CoreDataManager.shared.deleteFromDatabase(photo: photo)
+        self.viewModel.deleteFromCoreData(photo: photo)
         self.fillWithData()
     }
     
 }
 
+    // MARK: - UICollectionViewDelegateFlowLayout
+
 extension LikedImagesView: UICollectionViewDelegateFlowLayout {
     // swiftlint: disable line_length
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        var width: CGFloat = 0
-        var height: CGFloat = 0
+        var width: CGFloat = .zero
+        var height: CGFloat = .zero
         
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular {
             width = view.frame.width / 3.5

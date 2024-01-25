@@ -38,7 +38,6 @@ final class NetworkManager {
     func fetchImages(completion: @escaping ([UnsplashPhoto]?) -> Void) {
         makeRequest { data, error in
             guard error == nil else {
-                print("error here")
                 completion(nil)
                 return
             }

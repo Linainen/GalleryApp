@@ -16,7 +16,6 @@ class TabBarController: UITabBarController {
     }
     
     private func setupTabBar() {
-        
         let galleryLayout = CustomCollectionViewFlowLayout.imageGalleryLayout
         let likedLayout = CustomCollectionViewFlowLayout.likedImagesLayout
         

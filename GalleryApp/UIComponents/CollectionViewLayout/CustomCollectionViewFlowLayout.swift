@@ -30,4 +30,5 @@ final class CustomCollectionViewFlowLayout {
         layout.scrollDirection = .horizontal
         return layout
     }()
+    
 }

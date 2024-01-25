@@ -11,24 +11,16 @@ import CoreData
 final class CoreDataManager {
     
     static let shared = CoreDataManager()
+    
     private init() {}
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
-    var likedImagesIds: [String] {
-        var array: [String] = []
-        images.forEach {
-            array.append($0.id)
+    var likedImagesIds: [String] = []
+    private var images: [CDUnsplashPhoto] = [] {
+        didSet {
+            self.updateImagesIds()
         }
-        return array
     }
-    
-    private var images: [CDUnsplashPhoto] = []
-//    {
-//        didSet {
-//            self.updateImagesIds()
-//        }
-//    }
     
     func fetchCDImages() {
         do {
@@ -59,7 +51,8 @@ final class CoreDataManager {
         }
     }
     
-    func saveNewPhotoToCoreData(_ photo: UnsplashPhoto) {
+    func saveNewPhotoToCoreData(_ photo: UnsplashPhoto?) {
+        guard let photo = photo else { return }
         let likedPhoto = CDUnsplashPhoto(context: self.context)
         likedPhoto.id = photo.id
         likedPhoto.altDescription = photo.altDescription
@@ -88,12 +81,13 @@ final class CoreDataManager {
         return newPhoto
     }
     
-//    private func updateImagesIds() {
-//        self.likedImagesIds.removeAll()
-//        images.forEach { [weak self] in
-//            self?.likedImagesIds.append($0.id)
-//        }
-//    }
+    private func updateImagesIds() {
+        var array: [String] = []
+        images.forEach {
+            array.append($0.id)
+        }
+        likedImagesIds = array
+    }
     
     private func saveContext() {
         do {

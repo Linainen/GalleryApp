@@ -8,18 +8,6 @@
 import UIKit
 import ProgressHUD
 
-protocol LikePhoto {
-    func update(with newPhoto: UnsplashPhoto?, at index: Int?)
-    func saveToCoreData(photo: UnsplashPhoto?)
-    func deleteFromCoreData(photo: UnsplashPhoto?)
-}
-
-extension LikePhoto {
-    func update(with newPhoto: UnsplashPhoto?, at index: Int?) {}
-    func saveToCoreData(photo: UnsplashPhoto?) {}
-    func deleteFromCoreData(photo: UnsplashPhoto?) {}
-}
-
 class ImageGalleryView: UICollectionViewController {
 
     private var viewModel = ImageGalleryViewModel()
@@ -36,12 +24,18 @@ class ImageGalleryView: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        RotationSettings.allowRotation = true
+        setupRotationSettings()
         setupTabBar()
         viewModel.checkLikedPhotos()
         DispatchQueue.main.async { [weak self] in
             self?.collectionView.reloadData()
         }
+    }
+    
+    // MARK: - Layout settings
+    
+    private func setupRotationSettings() {
+        RotationSettings.allowRotation = true
     }
     
     override func viewWillLayoutSubviews() {
@@ -55,6 +49,8 @@ class ImageGalleryView: UICollectionViewController {
             self.collectionView.collectionViewLayout.invalidateLayout()
         }
     }
+    
+    // MARK: - Fill collection view with data
         
     private func fillWithData() {
         viewModel.getPhotos()
@@ -128,30 +124,25 @@ class ImageGalleryView: UICollectionViewController {
 
 // MARK: - LikePhoto Protocol Delegates
 
-extension ImageGalleryView: LikePhoto {
-
-    func update(with newPhoto: UnsplashPhoto?, at index: Int?) {
-        guard let photo = newPhoto, let index = index else { return }
-        self.viewModel.photos[index].likedByUser = photo.likedByUser
+extension ImageGalleryView: LikePhotoDelegate {
+    
+    func saveToCoreData(photo: UnsplashPhoto?) {
+        self.viewModel.saveToCoreData(photo)
         DispatchQueue.main.async { [weak self] in
-            self?.collectionView.reloadData()
+            self?.collectionView?.reloadData()
         }
     }
     
-    func saveToCoreData(photo: UnsplashPhoto?) {
-        guard let photo = photo else { return }
-        CoreDataManager.shared.saveNewPhotoToCoreData(photo)
-    }
-    
     func deleteFromCoreData(photo: UnsplashPhoto?) {
-        CoreDataManager.shared.deleteFromDatabase(photo: photo)
-        self.viewModel.checkLikedPhotos()
+        self.viewModel.deleteFromCoreData(photo)
         DispatchQueue.main.async { [weak self] in
             self?.collectionView?.reloadData()
         }
     }
     
 }
+
+// MARK: - UICollectionViewDelegateFlowLayout
 
 extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
     // swiftlint: disable line_length
