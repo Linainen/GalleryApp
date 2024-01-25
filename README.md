@@ -24,7 +24,7 @@ Clone the repository:
 https://github.com/Linainen/GalleryApp.git
 
 Install the application dependencies:
-$ cd /GalleryApp
+$ cd /GalleryApp /n
 $ pod install
 
 Open the file GalleryApp.xcworkspace with XCode
