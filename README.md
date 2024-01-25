@@ -23,7 +23,7 @@ save them locally on your device! Sounds great, doesn't it?
 Clone the repository: <br>
 https://github.com/Linainen/GalleryApp.git
 
-Install the application dependencies:
+Install the application dependencies: <br>
 $ cd /GalleryApp <br>
 $ pod install
 
