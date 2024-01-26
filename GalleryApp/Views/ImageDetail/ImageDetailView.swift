@@ -74,14 +74,14 @@ class ImageDetailView: UICollectionViewController {
     // MARK: - Setup CollectionView data source
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.photos.count
+        return viewModel.photos.value?.count ?? .zero
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let photo = self.viewModel.photos[indexPath.item]
+        let photo = self.viewModel.photos.value?[indexPath.item]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageDetailCell.identifier, for: indexPath) as! ImageDetailCell
         cell.photo = photo
-        cell.delegate = self
+        cell.delegate = self.viewModel
         cell.photoIndex = indexPath.item
         return cell
     }
@@ -101,17 +101,4 @@ extension ImageDetailView: UICollectionViewDelegateFlowLayout {
         return .zero
     }
     // swiftlint: enable line_length
-}
-
-    // MARK: - LikePhotoDelegate
-
-extension ImageDetailView: LikePhotoDelegate {
-    
-    func deleteFromCoreData(photo: UnsplashPhoto?) {
-        self.viewModel.deleteFromCoreData(photo)
-    }
-    
-    func saveToCoreData(photo: UnsplashPhoto?) {
-        self.viewModel.saveToCoreData(photo)
-    }
 }

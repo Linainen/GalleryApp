@@ -18,6 +18,7 @@ class ImageGalleryView: UICollectionViewController {
         
         setupCollectionView()
         setupNavBar()
+        bindViewModel()
         fillWithData()
     }
     
@@ -27,8 +28,13 @@ class ImageGalleryView: UICollectionViewController {
         setupRotationSettings()
         setupTabBar()
         viewModel.checkLikedPhotos()
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView.reloadData()
+    }
+    
+    private func bindViewModel() {
+        viewModel.photos.bind { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
         }
     }
     
@@ -55,9 +61,6 @@ class ImageGalleryView: UICollectionViewController {
     private func fillWithData() {
         viewModel.getPhotos()
         viewModel.checkLikedPhotos()
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView.reloadData()
-        }
     }
 
     // MARK: - Setup UI
@@ -83,13 +86,13 @@ class ImageGalleryView: UICollectionViewController {
     // MARK: - Collection View delegates and data source
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.photos.count
+        return viewModel.photos.value?.count ?? .zero
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let photo = viewModel.photos[indexPath.item]
+        let photo = viewModel.photos.value?[indexPath.item]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as! ImageCell
-        cell.delegate = self
+        cell.delegate = self.viewModel
         cell.photoIndex = indexPath.item
         cell.photo = photo
         return cell
@@ -112,34 +115,11 @@ class ImageGalleryView: UICollectionViewController {
             timer?.invalidate()
             timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { [weak self] _ in
                 self?.viewModel.getPhotos()
-                DispatchQueue.main.async { [weak self] in
-                    self?.collectionView.reloadData()
-                    ProgressHUD.dismiss()
-                }
+                ProgressHUD.dismiss()
             }
         }
     }
 
-}
-
-// MARK: - LikePhoto Protocol Delegates
-
-extension ImageGalleryView: LikePhotoDelegate {
-    
-    func saveToCoreData(photo: UnsplashPhoto?) {
-        self.viewModel.saveToCoreData(photo)
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView?.reloadData()
-        }
-    }
-    
-    func deleteFromCoreData(photo: UnsplashPhoto?) {
-        self.viewModel.deleteFromCoreData(photo)
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView?.reloadData()
-        }
-    }
-    
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout

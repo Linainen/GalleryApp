@@ -7,9 +7,9 @@
 
 import Foundation
 
-final class ImageGalleryViewModel {
+final class ImageGalleryViewModel: LikePhotoDelegate {
     
-    var photos: [UnsplashPhoto] = []
+    var photos: Observable<[UnsplashPhoto]> = Observable([])
     
     private var photoIds: [String] {
         CoreDataManager.shared.likedImagesIds
@@ -23,29 +23,33 @@ final class ImageGalleryViewModel {
                 if self.photoIds.contains($0.id) {
                     var newPhoto = $0
                     newPhoto.likedByUser = true
-                    self.photos.append(newPhoto)
+                    self.photos.value?.append(newPhoto)
                 } else {
-                    self.photos.append($0)
+                    self.photos.value?.append($0)
                 }
             }
         }
     }
     
     func checkLikedPhotos() {
-        for (index, photo) in photos.enumerated() {
+        guard let array = photos.value else { return }
+        for (index, photo) in array.enumerated() {
             var updatedPhoto = photo
             updatedPhoto.likedByUser = photoIds.contains(photo.id) ? true : false
-            photos[index] = updatedPhoto
+            photos.value?[index] = updatedPhoto
         }
     }
     
-    func deleteFromCoreData(_ photo: UnsplashPhoto?) {
+    // MARK: - LikePhotoDelegate
+    
+    func deleteFromCoreData(photo: UnsplashPhoto?) {
         CoreDataManager.shared.deleteFromDatabase(photo: photo)
         self.checkLikedPhotos()
     }
     
-    func saveToCoreData(_ photo: UnsplashPhoto?) {
+    func saveToCoreData(photo: UnsplashPhoto?) {
         CoreDataManager.shared.saveNewPhotoToCoreData(photo)
         self.checkLikedPhotos()
     }
+    
 }

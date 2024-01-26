@@ -8,9 +8,9 @@
 import UIKit
 import Kingfisher
 
-final class ImageDetailViewModel {
+final class ImageDetailViewModel: LikePhotoDelegate {
     
-    var photos: [UnsplashPhoto] = []
+    var photos: Observable<[UnsplashPhoto]> = Observable([])
     
     private var photoIds: [String] {
         CoreDataManager.shared.likedImagesIds
@@ -20,7 +20,7 @@ final class ImageDetailViewModel {
     
     func saveToImageGallery() {
         let indexPath = IndexPath(item: scrollIndex, section: 0)
-        guard let imageURL = photos[indexPath.item].urls.regular.asURL else { return }
+        guard let imageURL = photos.value?[indexPath.item].urls.regular.asURL else { return }
         let resourse = KF.ImageResource(downloadURL: imageURL)
         KingfisherManager.shared.retrieveImage(with: resourse, options: nil, progressBlock: nil, downloadTaskUpdated: nil) { result in
             switch result {
@@ -33,21 +33,22 @@ final class ImageDetailViewModel {
         }
     }
     
-    func deleteFromCoreData(_ photo: UnsplashPhoto?) {
+    func deleteFromCoreData(photo: UnsplashPhoto?) {
         CoreDataManager.shared.deleteFromDatabase(photo: photo)
         self.checkLikedPhotos()
     }
     
-    func saveToCoreData(_ photo: UnsplashPhoto?) {
+    func saveToCoreData(photo: UnsplashPhoto?) {
         CoreDataManager.shared.saveNewPhotoToCoreData(photo)
         self.checkLikedPhotos()
     }
     
     private func checkLikedPhotos() {
-        for (index, photo) in photos.enumerated() {
+        guard let array = photos.value else { return }
+        for (index, photo) in array.enumerated() {
             var updatedPhoto = photo
             updatedPhoto.likedByUser = photoIds.contains(photo.id) ? true : false
-            photos[index] = updatedPhoto
+            photos.value?[index] = updatedPhoto
         }
     }
 }

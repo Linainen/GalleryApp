@@ -17,7 +17,8 @@ class LikedImagesView: UICollectionViewController {
         super.viewDidLoad()
 
         setupUI()
-        fillWithData()
+        viewModel.getPhotos()
+        bindViewModelPhotos()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -25,22 +26,36 @@ class LikedImagesView: UICollectionViewController {
         
         setupRotationSettings()
         setupTabBar()
-        fillWithData()
+        viewModel.getPhotos()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if viewModel.checkNoImages() {
-            ProgressHUD.colorBannerTitle = .descriptionTextColor
-            ProgressHUD.colorAnimation = .likeBtnColor
-            ProgressHUD.showError("Empty", image: .noImages, interaction: true, delay: 1.5)
+        
+        bindViewModelNoImages()
+    }
+    
+    private func bindViewModelNoImages() {
+        viewModel.checkNoImages()
+        viewModel.noImages.bind { noImages in
+            guard let noImages = noImages else { return }
+            if noImages {
+                ProgressHUD.showError("Empty", image: .noImages, interaction: true, delay: 1.5)
+            }
+        }
+    }
+    
+    private func bindViewModelPhotos() {
+        viewModel.photos.bind { [weak self] _ in
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
         }
     }
     
     // MARK: - Layout settings
     
     private func setupUI() {
-        setupRotationSettings()
         setupCollectionView()
         setupNavBar()
         setupTabBar()
@@ -59,15 +74,6 @@ class LikedImagesView: UICollectionViewController {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate { _ in
             self.collectionView.collectionViewLayout.invalidateLayout()
-        }
-    }
-    
-    // MARK: - Fill collection view with data
-    
-    private func fillWithData() {
-        viewModel.getPhotos()
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView.reloadData()
         }
     }
     
@@ -94,13 +100,13 @@ class LikedImagesView: UICollectionViewController {
     // MARK: - Setup Collection View Delegates and Data Source
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.photos.count
+        return viewModel.photos.value?.count ?? .zero
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let photo = viewModel.photos[indexPath.item]
+        let photo = viewModel.photos.value?[indexPath.item]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as! ImageCell
-        cell.delegate = self
+        cell.delegate = self.viewModel
         cell.photoIndex = indexPath.item
         cell.photo = photo
         return cell
@@ -114,17 +120,6 @@ class LikedImagesView: UICollectionViewController {
         navigationController?.pushViewController(imageDetailVC, animated: true)
     }
 
-}
-
-    // MARK: - LikePhoto protocol implementation
-
-extension LikedImagesView: LikePhotoDelegate {
-    
-    func deleteFromCoreData(photo: UnsplashPhoto?) {
-        self.viewModel.deleteFromCoreData(photo: photo)
-        self.fillWithData()
-    }
-    
 }
 
     // MARK: - UICollectionViewDelegateFlowLayout
