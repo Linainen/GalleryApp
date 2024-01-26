@@ -27,7 +27,6 @@ final class LikedImagesViewModel: LikePhotoDelegate {
     func deleteFromCoreData(photo: UnsplashPhoto?) {
         CoreDataManager.shared.deleteFromDatabase(photo: photo)
         self.getPhotos()
-        self.checkNoImages()
     }
     
 }
